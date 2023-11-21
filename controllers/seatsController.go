@@ -113,13 +113,17 @@ func SeatsHold(c *gin.Context) {
 		return
 	}
 
-	// Invoice ke Payment App
+	// Kl sukses
 
 	BookingsCreate(utility.StrToUint(id))
 	initializers.DB.Model(&seat).Update("Status", "ON GOING")
 
+	// Invoice ke Payment App
+
 	c.JSON(200, gin.H{
 		"message": "Seat successfully hold, waiting for payment",
+		"invoice": "8tr3fgi38ft23",
+		"url":     "makantaiyangcukupbesar.com",
 		"seat":    seat,
 	})
 }

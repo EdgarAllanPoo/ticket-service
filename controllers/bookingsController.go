@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"time"
 	"tubes-pat/ticket-service/initializers"
 	"tubes-pat/ticket-service/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rabbitmq/amqp091-go"
 )
 
 func BookingsCreate(seat_id uint) {
@@ -39,4 +41,23 @@ func BookingUpdate(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Booking Status Successfully Updated",
 	})
+
+	// Post ke MQ
+	PublishToQueue("BOOKING ID " + id + " SUKSES DIUBAH MENJADI " + body.Status)
+}
+
+func PublishToQueue(msg string) {
+	err := initializers.Ch.Publish(
+		"go-booking-exchange", // exchange
+		"go-booking-key",      // routing key
+		false,                 // mandatory
+		false,                 // immediate
+		amqp091.Publishing{
+			DeliveryMode: amqp091.Transient,
+			ContentType:  "text/plain",
+			Body:         []byte(msg),
+			Timestamp:    time.Now(),
+		})
+
+	initializers.FailOnError(err, "Failed to Publish on RabbitMQ")
 }

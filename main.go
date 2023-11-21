@@ -10,9 +10,13 @@ import (
 func init() {
 	initializers.LoadEnvVariables()
 	initializers.ConnectToDB()
+	initializers.ConnectToQueue()
 }
 
 func main() {
+	defer initializers.Ch.Close()
+	defer initializers.Conn.Close()
+
 	r := gin.Default()
 
 	// Route for events
