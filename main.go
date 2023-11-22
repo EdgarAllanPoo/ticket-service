@@ -47,6 +47,7 @@ func main() {
 
 	// Route for Bookings
 	r.GET("/bookings", controllers.BookingsGetAll)
+	r.GET("/bookings/:id", controllers.BookingsGetById)
 
 	r.Run()
 }

@@ -24,6 +24,17 @@ func BookingsGetAll(c *gin.Context) {
 	})
 }
 
+func BookingsGetById(c *gin.Context) {
+	id := c.Param("id")
+
+	var booking models.Booking
+	initializers.DB.First(&booking, id)
+
+	c.JSON(200, gin.H{
+		"booking": booking,
+	})
+}
+
 func BookingUpdate(c *gin.Context) {
 	id := c.Param("id")
 

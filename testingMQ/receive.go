@@ -87,6 +87,9 @@ func initAmqp() {
 }
 
 func main() {
+	defer ch.Close()
+	defer conn.Close()
+
 	log.Println("Start consuming the Queue...")
 	var count int = 1
 
