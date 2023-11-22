@@ -45,5 +45,8 @@ func main() {
 	// WebHook API Call
 	r.POST("/webhook/:id", controllers.BookingUpdate)
 
+	// Route for Bookings
+	r.GET("/bookings", controllers.BookingsGetAll)
+
 	r.Run()
 }

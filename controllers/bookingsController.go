@@ -15,6 +15,15 @@ func BookingsCreate(seat_id uint) {
 	initializers.DB.Create(&booking)
 }
 
+func BookingsGetAll(c *gin.Context) {
+	var bookings []models.Booking
+	initializers.DB.Find(&bookings)
+
+	c.JSON(200, gin.H{
+		"bookings": bookings,
+	})
+}
+
 func BookingUpdate(c *gin.Context) {
 	id := c.Param("id")
 
@@ -48,10 +57,10 @@ func BookingUpdate(c *gin.Context) {
 
 func PublishToQueue(msg string) {
 	err := initializers.Ch.Publish(
-		"go-booking-exchange", // exchange
-		"go-booking-key",      // routing key
-		false,                 // mandatory
-		false,                 // immediate
+		"booking-result", // exchange
+		"go-booking-key", // routing key
+		false,            // mandatory
+		false,            // immediate
 		amqp091.Publishing{
 			DeliveryMode: amqp091.Transient,
 			ContentType:  "text/plain",

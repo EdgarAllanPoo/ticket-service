@@ -64,11 +64,11 @@ func initAmqp() {
 		q.Name, q.Messages, q.Consumers, "go-test-key")
 
 	err = ch.QueueBind(
-		q.Name,                // name of the queue
-		"go-booking-key",      // bindingKey
-		"go-booking-exchange", // sourceExchange
-		false,                 // noWait
-		nil,                   // arguments
+		q.Name,           // name of the queue
+		"go-booking-key", // bindingKey
+		"booking-result", // sourceExchange
+		false,            // noWait
+		nil,              // arguments
 	)
 	failOnError(err, "Error binding to the Queue")
 
